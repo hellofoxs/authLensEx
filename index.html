@@ -17,7 +17,7 @@
         
         <div class="container">
           <div class="card">
-            <!-- Language and Theme Controls -->
+            <!-- Language Control -->
             <div class="controls">
               <div class="language-selector">
                 <select id="languageSelect">
@@ -25,11 +25,6 @@
                   <option value="id">Bahasa Indonesia</option>
                   <option value="ar">العربية</option>
                 </select>
-              </div>
-              <div class="theme-toggle">
-                <button id="themeToggle" class="theme-btn">
-                  <span class="theme-icon">🌙</span>
-                </button>
               </div>
             </div>
             
@@ -339,24 +334,18 @@
         }
       };
 
-      // Theme detection and management
+      // Theme detection and management (automatic system theme)
       function detectSystemTheme() {
         return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       }
 
       function applyTheme(theme) {
         document.body.setAttribute('data-theme', theme);
-        const themeIcon = document.querySelector('.theme-icon');
-        if (themeIcon) {
-          themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
       }
 
       function initTheme() {
-        const savedTheme = localStorage.getItem('theme');
         const systemTheme = detectSystemTheme();
-        const theme = savedTheme || systemTheme;
-        applyTheme(theme);
+        applyTheme(systemTheme);
       }
 
       // Language management
@@ -403,15 +392,6 @@
         document.getElementById('languageSelect').value = savedLanguage;
         applyLanguage(savedLanguage);
 
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', function() {
-          const currentTheme = document.body.getAttribute('data-theme') || detectSystemTheme();
-          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-          applyTheme(newTheme);
-          localStorage.setItem('theme', newTheme);
-        });
-
         // Language selector functionality
         const languageSelect = document.getElementById('languageSelect');
         languageSelect.addEventListener('change', function() {
@@ -421,9 +401,7 @@
         // Listen for system theme changes
         if (window.matchMedia) {
           window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-            if (!localStorage.getItem('theme')) {
-              applyTheme(e.matches ? 'dark' : 'light');
-            }
+            applyTheme(e.matches ? 'dark' : 'light');
           });
         }
 
