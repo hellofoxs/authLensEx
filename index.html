@@ -1,448 +1,859 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
+<html lang="en">
+
+<head>
     <meta charset="utf-8" />
     <title>Screen Studio Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      @import url("https://fonts.googleapis.com/css?family=Inter:500,400");
-      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500&display=swap");
+        @import url("https://fonts.googleapis.com/css?family=Inter:500,400");
     </style>
     <link href="styles.css" rel="stylesheet" />
-  </head>
-  <body>
+    <style>
+        /* Reset an/* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: black;
+            color: white;
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Main layout */
+        .main {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .background-image {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Card styles */
+        .card {
+            /* max-width: 820px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            position: relative;
+            backdrop-filter: blur(25px);
+            box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            min-height: 600px; */
+
+            width: 100%;
+            max-width: 820px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            position: relative;
+            backdrop-filter: blur(25px);
+            box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            min-height: 500px;
+            margin: 0 auto;
+        }
+
+        /* Window controls */
+        .window-controls {
+            position: absolute;
+            top: 23px;
+            left: 24px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .control-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transition: opacity 0.2s;
+        }
+
+        .control-btn.red {
+            background: #ff5f56;
+        }
+
+        .control-btn.gray {
+            background: #2f3033;
+        }
+
+        /* Navigation tabs */
+        .tabs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 40px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            gap: 8px;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+            min-width: 100px;
+            flex: 0 0 auto;
+            opacity: 0.6;
+        }
+
+        .tab img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+        }
+
+        .tab span {
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 1;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.05);
+            opacity: 0.8;
+        }
+
+        /* Tab content */
+        .tab-content {
+            display: none;
+            width: 100%;
+            gap: 35px;
+        }
+
+        .tab-content.active {
+            /* display: block; */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* gap: 32px; */
+        }
+
+        /* Card content */
+        .card-content {
+            /* padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+            min-height: 500px; */
+
+            /* padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            min-height: 400px; */
+
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* gap: 32px; */
+        }
+
+        .header {
+            text-align: center;
+        }
+
+        .logo img {
+            width: 56px;
+            height: 56px;
+            margin-bottom: 16px;
+            object-fit: contain;
+        }
+
+        .title h1 {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .title p {
+            font-size: 12px;
+            opacity: 0.55;
+        }
+
+        /* Form styles */
+        .form {
+            width: 100%;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        input[type="email"] {
+            height: 38px;
+            padding: 0 12px;
+            background: #1d212a;
+            border: 1px solid #252935;
+            border-radius: 6px;
+            color: #757575;
+            font-size: 13px;
+            font-weight: 500;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        input[type="email"]:focus {
+            outline: none;
+            border-color: #3898FF;
+            box-shadow: 0 0 0 2px rgba(56, 152, 255, 0.2);
+        }
+
+        .continue-btn {
+            height: 38px;
+            background: linear-gradient(to right, #3898FF, #7A5FFF);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .continue-btn .btn-text,
+        .continue-btn .shortcut {
+            position: relative;
+            z-index: 2;
+            transition: opacity 0.2s;
+        }
+
+        .continue-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #7A5FFF, #3898FF);
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 1;
+        }
+
+        .continue-btn:hover::before {
+            opacity: 1;
+        }
+
+        .continue-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(56, 152, 255, 0.3);
+        }
+
+        .shortcut {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .terms {
+            font-size: 12px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
+            margin-top: 8px;
+        }
+
+        .terms a {
+            text-decoration: underline;
+            transition: opacity 0.2s;
+        }
+
+        .terms a:hover {
+            opacity: 0.8;
+        }
+
+        .contact-info {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .contact-info a {
+            text-decoration: underline;
+            transition: opacity 0.2s;
+        }
+
+        .contact-info a:hover {
+            opacity: 0.8;
+        }
+
+        /* Content sections for other tabs */
+        .content-section {
+            width: 100%;
+            max-width: 500px;
+            text-align: left;
+        }
+
+        .content-section h3 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        /* Device list styles */
+        .device-list,
+        .license-list,
+        .links-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .device-item,
+        .license-item,
+        .link-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .device-info,
+        .license-info,
+        .link-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .device-info strong,
+        .license-info strong,
+        .link-info strong {
+            font-size: 14px;
+            color: white;
+        }
+
+        .device-status,
+        .license-status,
+        .link-status {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .device-status.active,
+        .license-status.valid,
+        .link-status.active {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .device-status.inactive {
+            background: rgba(156, 163, 175, 0.2);
+            color: #9ca3af;
+        }
+
+        .device-item p,
+        .license-item p,
+        .link-item p {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0;
+        }
+
+        .license-key {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: #a3a3a3;
+            margin-top: 8px;
+            display: block;
+        }
+
+        /* Subscription styles */
+        .subscription-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .plan-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .plan-info strong {
+            font-size: 16px;
+            color: white;
+        }
+
+        .plan-price {
+            font-size: 14px;
+            color: #3898FF;
+            font-weight: 500;
+        }
+
+        .manage-btn {
+            background: rgba(56, 152, 255, 0.2);
+            border: 1px solid #3898FF;
+            color: #3898FF;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 12px;
+        }
+
+        .manage-btn:hover {
+            background: rgba(56, 152, 255, 0.3);
+        }
+
+        /* Link URL styles */
+        .link-url {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .link-url input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 6px 8px;
+            font-size: 11px;
+            color: white;
+            font-family: 'Courier New', monospace;
+        }
+
+        .copy-btn {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            color: #22c55e;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(34, 197, 94, 0.3);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .card {
+                max-width: 100%;
+            }
+
+            .window-controls {
+                display: none;
+            }
+
+            .tabs {
+                padding: 10px 20px;
+                justify-content: center;
+            }
+
+            .card-content {
+                padding: 20px;
+            }
+
+            .form {
+                max-width: 100%;
+            }
+
+            .content-section {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tabs {
+                padding: 10px;
+                gap: 4px;
+                justify-content: flex-start;
+            }
+
+            .tab {
+                padding: 8px;
+                min-width: 70px;
+            }
+
+            .tab img {
+                width: 18px;
+                height: 18px;
+            }
+
+            .card-content {
+                padding: 16px;
+            }
+
+            .logo img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .title h1 {
+                font-size: 18px;
+            }
+
+            .link-url {
+                flex-direction: column;
+            }
+
+            .link-url input {
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
     <main class="main">
-      <section class="hero">
-        <img class="background-image" alt="Background image" src="/image.png" />
-        
-        <div class="container">
-          <div class="card">
-            <!-- Language Control -->
-            <div class="controls">
-              <div class="language-selector">
-                <select id="languageSelect">
-                  <option value="en">English</option>
-                  <option value="id">Bahasa Indonesia</option>
-                  <option value="ar">العربية</option>
-                </select>
-              </div>
+        <section class="hero">
+            <img class="background-image" alt="Background image" src="assets/img/background-new.png" />
+
+            <div class="container">
+                <div class="card">
+                    <!-- Window control buttons -->
+                    <div class="window-controls">
+                        <div class="control-btn red"></div>
+                        <div class="control-btn gray"></div>
+                        <div class="control-btn gray"></div>
+                    </div>
+
+                    <!-- Navigation tabs -->
+                    <nav class="tabs">
+                        <div class="tab active" data-tab="general">
+                            <img src="assets/img/icon-2.svg" alt="General icon" />
+                            <span>General</span>
+                        </div>
+                        <div class="tab" data-tab="devices">
+                            <img src="assets/img/icon-3.svg" alt="Devices icon" />
+                            <span>Devices</span>
+                        </div>
+                        <div class="tab" data-tab="license-keys">
+                            <img src="assets/img/icon-4.svg" alt="License keys icon" />
+                            <span>License keys</span>
+                        </div>
+                        <div class="tab" data-tab="subscriptions">
+                            <img src="assets/img/icon-1.svg" alt="Subscriptions icon" />
+                            <span>Subscriptions</span>
+                        </div>
+                        <div class="tab" data-tab="shareable-links">
+                            <img src="assets/img/icon.svg" alt="Shareable links icon" />
+                            <span>Shareable links</span>
+                        </div>
+                    </nav>
+
+                    <div class="card-content">
+                        <!-- General Tab Content -->
+                        <div class="tab-content active" id="general">
+                            <div class="header">
+                                <div class="logo">
+                                    <img src="assets/img/logo-transparent-681d19be-png.png" alt="Logo" />
+                                </div>
+                                <div class="title">
+                                    <h1>Screen Studio dashboard</h1>
+                                    <p>Please enter your email address to continue</p>
+                                </div>
+                            </div>
+
+                            <form class="form">
+                                <input type="email" placeholder="Email address..." />
+                                <button type="submit" class="continue-btn">
+                                    <span class="btn-text">Continue</span>
+                                    <span class="shortcut">⏎</span>
+                                </button>
+                                <p class="terms">
+                                    By continuing, you agree to the <a href="#">Terms of Service</a> and<br />
+                                    <a href="#">Privacy Policy</a>.
+                                </p>
+                            </form>
+
+                            <p class="contact-info">
+                                In case of any issues, please contact us at <a
+                                    href="mailto:team@screen.studio">team@screen.studio</a>
+                            </p>
+                        </div>
+
+                        <!-- Devices Tab Content -->
+                        <div class="tab-content" id="devices">
+                            <div class="header">
+                                <div class="logo">
+                                    <img src="assets/img/logo-transparent-681d19be-png.png" alt="Logo" />
+                                </div>
+                                <div class="title">
+                                    <h1>Device Management</h1>
+                                    <p>Manage your connected devices and recording settings</p>
+                                </div>
+                            </div>
+
+                            <div class="content-section">
+                                <h3>Connected Devices</h3>
+                                <div class="device-list">
+                                    <div class="device-item">
+                                        <div class="device-info">
+                                            <strong>MacBook Pro 16"</strong>
+                                            <span class="device-status active">Active</span>
+                                        </div>
+                                        <p>Last used: Today at 2:30 PM</p>
+                                    </div>
+                                    <div class="device-item">
+                                        <div class="device-info">
+                                            <strong>iMac 27"</strong>
+                                            <span class="device-status inactive">Inactive</span>
+                                        </div>
+                                        <p>Last used: Yesterday at 10:15 AM</p>
+                                    </div>
+                                    <div class="device-item">
+                                        <div class="device-info">
+                                            <strong>iMac 27"</strong>
+                                            <span class="device-status inactive">Inactive</span>
+                                        </div>
+                                        <p>Last used: Yesterday at 10:15 AM</p>
+                                    </div>
+                                    <div class="device-item">
+                                        <div class="device-info">
+                                            <strong>iMac 27"</strong>
+                                            <span class="device-status inactive">Inactive</span>
+                                        </div>
+                                        <p>Last used: Yesterday at 10:15 AM</p>
+                                    </div>
+                                    <div class="device-item">
+                                        <div class="device-info">
+                                            <strong>iMac 27"</strong>
+                                            <span class="device-status inactive">Inactive</span>
+                                        </div>
+                                        <p>Last used: Yesterday at 10:15 AM</p>
+                                    </div>
+                                    <div class="device-item">
+                                        <div class="device-info">
+                                            <strong>iMac 27"</strong>
+                                            <span class="device-status inactive">Inactive</span>
+                                        </div>
+                                        <p>Last used: Yesterday at 10:15 AM</p>
+                                    </div>
+                                    <div class="device-item">
+                                        <div class="device-info">
+                                            <strong>iMac 27"</strong>
+                                            <span class="device-status inactive">Inactive</span>
+                                        </div>
+                                        <p>Last used: Yesterday at 10:15 AM</p>
+                                    </div>
+                                    <div class="device-item">
+                                        <div class="device-info">
+                                            <strong>iMac 27"</strong>
+                                            <span class="device-status inactive">Inactive</span>
+                                        </div>
+                                        <p>Last used: Yesterday at 10:15 AM</p>
+                                    </div>
+                                    <div class="device-item">
+                                        <div class="device-info">
+                                            <strong>iMac 27"</strong>
+                                            <span class="device-status inactive">Inactive</span>
+                                        </div>
+                                        <p>Last used: Yesterday at 10:15 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- License Keys Tab Content -->
+                        <div class="tab-content" id="license-keys">
+                            <div class="header">
+                                <div class="logo">
+                                    <img src="assets/img/logo-transparent-681d19be-png.png" alt="Logo" />
+                                </div>
+                                <div class="title">
+                                    <h1>License Keys</h1>
+                                    <p>Manage your Screen Studio license keys</p>
+                                </div>
+                            </div>
+
+                            <div class="content-section">
+                                <h3>Active Licenses</h3>
+                                <div class="license-list">
+                                    <div class="license-item">
+                                        <div class="license-info">
+                                            <strong>Screen Studio Pro</strong>
+                                            <span class="license-status valid">Valid</span>
+                                        </div>
+                                        <p>Expires: December 31, 2024</p>
+                                        <code class="license-key">SS-PRO-XXXX-XXXX-XXXX</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Subscriptions Tab Content -->
+                        <div class="tab-content" id="subscriptions">
+                            <div class="header">
+                                <div class="logo">
+                                    <img src="assets/img/logo-transparent-681d19be-png.png" alt="Logo" />
+                                </div>
+                                <div class="title">
+                                    <h1>Subscriptions</h1>
+                                    <p>Manage your Screen Studio subscription</p>
+                                </div>
+                            </div>
+
+                            <div class="content-section">
+                                <h3>Current Plan</h3>
+                                <div class="subscription-card">
+                                    <div class="plan-info">
+                                        <strong>Screen Studio Pro</strong>
+                                        <span class="plan-price">$89/year</span>
+                                    </div>
+                                    <p>Next billing date: January 15, 2025</p>
+                                    <button class="manage-btn">Manage Subscription</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shareable Links Tab Content -->
+                        <div class="tab-content" id="shareable-links">
+                            <div class="header">
+                                <div class="logo">
+                                    <img src="assets/img/logo-transparent-681d19be-png.png" alt="Logo" />
+                                </div>
+                                <div class="title">
+                                    <h1>Shareable Links</h1>
+                                    <p>Create and manage shareable links for your recordings</p>
+                                </div>
+                            </div>
+
+                            <div class="content-section">
+                                <h3>Recent Links</h3>
+                                <div class="links-list">
+                                    <div class="link-item">
+                                        <div class="link-info">
+                                            <strong>Product Demo Recording</strong>
+                                            <span class="link-status active">Active</span>
+                                        </div>
+                                        <p>Created: 2 hours ago</p>
+                                        <div class="link-url">
+                                            <input type="text" value="https://screen.studio/share/abc123" readonly />
+                                            <button class="copy-btn">Copy</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <!-- Window control buttons -->
-            <div class="window-controls">
-              <div class="control-btn red"></div>
-              <div class="control-btn gray"></div>
-              <div class="control-btn gray"></div>
-            </div>
-
-            <!-- Navigation tabs -->
-            <nav class="tabs">
-              <div class="tab active" data-tab="general">
-                <img src="/icon-2.svg" alt="General icon" />
-                <span data-translate="general">General</span>
-              </div>
-              <div class="tab" data-tab="devices">
-                <img src="/icon-3.svg" alt="Devices icon" />
-                <span data-translate="devices">Devices</span>
-              </div>
-              <div class="tab" data-tab="license-keys">
-                <img src="/icon-4.svg" alt="License keys icon" />
-                <span data-translate="license_keys">License keys</span>
-              </div>
-              <div class="tab" data-tab="subscriptions">
-                <img src="/icon-1.svg" alt="Subscriptions icon" />
-                <span data-translate="subscriptions">Subscriptions</span>
-              </div>
-              <div class="tab" data-tab="shareable-links">
-                <img src="/icon.svg" alt="Shareable links icon" />
-                <span data-translate="shareable_links">Shareable links</span>
-              </div>
-            </nav>
-
-            <div class="card-content">
-              <!-- General Tab Content -->
-              <div class="tab-content active" id="general">
-                <div class="header">
-                  <div class="logo">
-                    <img src="/logo-transparent-681d19be-png.png" alt="Logo" />
-                  </div>
-                  <div class="title">
-                    <h1 data-translate="dashboard_title">Screen Studio dashboard</h1>
-                    <p data-translate="email_prompt">Please enter your email address to continue</p>
-                  </div>
-                </div>
-
-                <form class="form">
-                  <input type="email" data-translate-placeholder="email_placeholder" placeholder="Email address..." />
-                  <button type="submit" class="continue-btn">
-                    <span class="btn-text" data-translate="continue">Continue</span>
-                    <span class="shortcut">⏎</span>
-                  </button>
-                  <p class="terms">
-                    <span data-translate="terms_text">By continuing, you agree to the</span> <a href="#" data-translate="terms_service">Terms of Service</a> <span data-translate="and">and</span><br/>
-                    <a href="#" data-translate="privacy_policy">Privacy Policy</a>.
-                  </p>
-                </form>
-
-                <p class="contact-info">
-                  <span data-translate="contact_text">In case of any issues, please contact us at</span> <a href="mailto:team@screen.studio">team@screen.studio</a>
-                </p>
-              </div>
-
-              <!-- Devices Tab Content -->
-              <div class="tab-content" id="devices">
-                <div class="header">
-                  <div class="logo">
-                    <img src="/logo-transparent-681d19be-png.png" alt="Logo" />
-                  </div>
-                  <div class="title">
-                    <h1 data-translate="device_management">Device Management</h1>
-                    <p data-translate="device_description">Manage your connected devices and recording settings</p>
-                  </div>
-                </div>
-
-                <div class="content-section">
-                  <h3 data-translate="connected_devices">Connected Devices</h3>
-                  <div class="device-list">
-                    <div class="device-item">
-                      <div class="device-info">
-                        <strong>MacBook Pro 16"</strong>
-                        <span class="device-status active" data-translate="active">Active</span>
-                      </div>
-                      <p><span data-translate="last_used">Last used:</span> <span data-translate="today_230pm">Today at 2:30 PM</span></p>
-                    </div>
-                    <div class="device-item">
-                      <div class="device-info">
-                        <strong>iMac 27"</strong>
-                        <span class="device-status inactive" data-translate="inactive">Inactive</span>
-                      </div>
-                      <p><span data-translate="last_used">Last used:</span> <span data-translate="yesterday_1015am">Yesterday at 10:15 AM</span></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- License Keys Tab Content -->
-              <div class="tab-content" id="license-keys">
-                <div class="header">
-                  <div class="logo">
-                    <img src="/logo-transparent-681d19be-png.png" alt="Logo" />
-                  </div>
-                  <div class="title">
-                    <h1 data-translate="license_keys">License Keys</h1>
-                    <p data-translate="license_description">Manage your Screen Studio license keys</p>
-                  </div>
-                </div>
-
-                <div class="content-section">
-                  <h3 data-translate="active_licenses">Active Licenses</h3>
-                  <div class="license-list">
-                    <div class="license-item">
-                      <div class="license-info">
-                        <strong>Screen Studio Pro</strong>
-                        <span class="license-status valid" data-translate="valid">Valid</span>
-                      </div>
-                      <p><span data-translate="expires">Expires:</span> <span data-translate="dec_31_2024">December 31, 2024</span></p>
-                      <code class="license-key">SS-PRO-XXXX-XXXX-XXXX</code>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Subscriptions Tab Content -->
-              <div class="tab-content" id="subscriptions">
-                <div class="header">
-                  <div class="logo">
-                    <img src="/logo-transparent-681d19be-png.png" alt="Logo" />
-                  </div>
-                  <div class="title">
-                    <h1 data-translate="subscriptions">Subscriptions</h1>
-                    <p data-translate="subscription_description">Manage your Screen Studio subscription</p>
-                  </div>
-                </div>
-
-                <div class="content-section">
-                  <h3 data-translate="current_plan">Current Plan</h3>
-                  <div class="subscription-card">
-                    <div class="plan-info">
-                      <strong>Screen Studio Pro</strong>
-                      <span class="plan-price">$89/year</span>
-                    </div>
-                    <p><span data-translate="next_billing">Next billing date:</span> <span data-translate="jan_15_2025">January 15, 2025</span></p>
-                    <button class="manage-btn" data-translate="manage_subscription">Manage Subscription</button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Shareable Links Tab Content -->
-              <div class="tab-content" id="shareable-links">
-                <div class="header">
-                  <div class="logo">
-                    <img src="/logo-transparent-681d19be-png.png" alt="Logo" />
-                  </div>
-                  <div class="title">
-                    <h1 data-translate="shareable_links">Shareable Links</h1>
-                    <p data-translate="links_description">Create and manage shareable links for your recordings</p>
-                  </div>
-                </div>
-
-                <div class="content-section">
-                  <h3 data-translate="recent_links">Recent Links</h3>
-                  <div class="links-list">
-                    <div class="link-item">
-                      <div class="link-info">
-                        <strong data-translate="product_demo">Product Demo Recording</strong>
-                        <span class="link-status active" data-translate="active">Active</span>
-                      </div>
-                      <p><span data-translate="created">Created:</span> <span data-translate="2_hours_ago">2 hours ago</span></p>
-                      <div class="link-url">
-                        <input type="text" value="https://screen.studio/share/abc123" readonly />
-                        <button class="copy-btn" data-translate="copy">Copy</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
     </main>
 
     <script>
-      // Translations
-      const translations = {
-        en: {
-          general: "General",
-          devices: "Devices",
-          license_keys: "License keys",
-          subscriptions: "Subscriptions",
-          shareable_links: "Shareable links",
-          dashboard_title: "Screen Studio dashboard",
-          email_prompt: "Please enter your email address to continue",
-          email_placeholder: "Email address...",
-          continue: "Continue",
-          terms_text: "By continuing, you agree to the",
-          terms_service: "Terms of Service",
-          and: "and",
-          privacy_policy: "Privacy Policy",
-          contact_text: "In case of any issues, please contact us at",
-          device_management: "Device Management",
-          device_description: "Manage your connected devices and recording settings",
-          connected_devices: "Connected Devices",
-          active: "Active",
-          inactive: "Inactive",
-          last_used: "Last used:",
-          today_230pm: "Today at 2:30 PM",
-          yesterday_1015am: "Yesterday at 10:15 AM",
-          license_description: "Manage your Screen Studio license keys",
-          active_licenses: "Active Licenses",
-          valid: "Valid",
-          expires: "Expires:",
-          dec_31_2024: "December 31, 2024",
-          subscription_description: "Manage your Screen Studio subscription",
-          current_plan: "Current Plan",
-          next_billing: "Next billing date:",
-          jan_15_2025: "January 15, 2025",
-          manage_subscription: "Manage Subscription",
-          links_description: "Create and manage shareable links for your recordings",
-          recent_links: "Recent Links",
-          product_demo: "Product Demo Recording",
-          created: "Created:",
-          "2_hours_ago": "2 hours ago",
-          copy: "Copy"
-        },
-        id: {
-          general: "Umum",
-          devices: "Perangkat",
-          license_keys: "Kunci Lisensi",
-          subscriptions: "Langganan",
-          shareable_links: "Tautan Berbagi",
-          dashboard_title: "Dashboard Screen Studio",
-          email_prompt: "Silakan masukkan alamat email Anda untuk melanjutkan",
-          email_placeholder: "Alamat email...",
-          continue: "Lanjutkan",
-          terms_text: "Dengan melanjutkan, Anda menyetujui",
-          terms_service: "Syarat Layanan",
-          and: "dan",
-          privacy_policy: "Kebijakan Privasi",
-          contact_text: "Jika ada masalah, silakan hubungi kami di",
-          device_management: "Manajemen Perangkat",
-          device_description: "Kelola perangkat terhubung dan pengaturan perekaman Anda",
-          connected_devices: "Perangkat Terhubung",
-          active: "Aktif",
-          inactive: "Tidak Aktif",
-          last_used: "Terakhir digunakan:",
-          today_230pm: "Hari ini pukul 14:30",
-          yesterday_1015am: "Kemarin pukul 10:15",
-          license_description: "Kelola kunci lisensi Screen Studio Anda",
-          active_licenses: "Lisensi Aktif",
-          valid: "Valid",
-          expires: "Berakhir:",
-          dec_31_2024: "31 Desember 2024",
-          subscription_description: "Kelola langganan Screen Studio Anda",
-          current_plan: "Paket Saat Ini",
-          next_billing: "Tanggal tagihan berikutnya:",
-          jan_15_2025: "15 Januari 2025",
-          manage_subscription: "Kelola Langganan",
-          links_description: "Buat dan kelola tautan berbagi untuk rekaman Anda",
-          recent_links: "Tautan Terbaru",
-          product_demo: "Rekaman Demo Produk",
-          created: "Dibuat:",
-          "2_hours_ago": "2 jam yang lalu",
-          copy: "Salin"
-        },
-        ar: {
-          general: "عام",
-          devices: "الأجهزة",
-          license_keys: "مفاتيح الترخيص",
-          subscriptions: "الاشتراكات",
-          shareable_links: "الروابط القابلة للمشاركة",
-          dashboard_title: "لوحة تحكم Screen Studio",
-          email_prompt: "يرجى إدخال عنوان بريدك الإلكتروني للمتابعة",
-          email_placeholder: "عنوان البريد الإلكتروني...",
-          continue: "متابعة",
-          terms_text: "بالمتابعة، فإنك توافق على",
-          terms_service: "شروط الخدمة",
-          and: "و",
-          privacy_policy: "سياسة الخصوصية",
-          contact_text: "في حالة وجود أي مشاكل، يرجى الاتصال بنا على",
-          device_management: "إدارة الأجهزة",
-          device_description: "إدارة الأجهزة المتصلة وإعدادات التسجيل",
-          connected_devices: "الأجهزة المتصلة",
-          active: "نشط",
-          inactive: "غير نشط",
-          last_used: "آخر استخدام:",
-          today_230pm: "اليوم في 2:30 مساءً",
-          yesterday_1015am: "أمس في 10:15 صباحاً",
-          license_description: "إدارة مفاتيح ترخيص Screen Studio",
-          active_licenses: "التراخيص النشطة",
-          valid: "صالح",
-          expires: "ينتهي في:",
-          dec_31_2024: "31 ديسمبر 2024",
-          subscription_description: "إدارة اشتراك Screen Studio الخاص بك",
-          current_plan: "الخطة الحالية",
-          next_billing: "تاريخ الفوترة التالي:",
-          jan_15_2025: "15 يناير 2025",
-          manage_subscription: "إدارة الاشتراك",
-          links_description: "إنشاء وإدارة الروابط القابلة للمشاركة لتسجيلاتك",
-          recent_links: "الروابط الحديثة",
-          product_demo: "تسجيل عرض المنتج",
-          created: "تم الإنشاء:",
-          "2_hours_ago": "منذ ساعتين",
-          copy: "نسخ"
-        }
-      };
-
-      // Theme detection and management (automatic system theme)
-      function detectSystemTheme() {
-        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
-
-      function applyTheme(theme) {
-        document.body.setAttribute('data-theme', theme);
-      }
-
-      function initTheme() {
-        const systemTheme = detectSystemTheme();
-        applyTheme(systemTheme);
-      }
-
-      // Language management
-      function applyLanguage(lang) {
-        const html = document.documentElement;
-        html.setAttribute('lang', lang);
-        html.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
-        
-        // Apply font family based on language
-        if (lang === 'ar') {
-          document.body.style.fontFamily = "'Noto Sans Arabic', 'Inter', sans-serif";
-        } else {
-          document.body.style.fontFamily = "'Inter', sans-serif";
-        }
-
-        // Update all translatable elements
-        const elements = document.querySelectorAll('[data-translate]');
-        elements.forEach(element => {
-          const key = element.getAttribute('data-translate');
-          if (translations[lang] && translations[lang][key]) {
-            element.textContent = translations[lang][key];
-          }
-        });
-
-        // Update placeholder text
-        const placeholderElements = document.querySelectorAll('[data-translate-placeholder]');
-        placeholderElements.forEach(element => {
-          const key = element.getAttribute('data-translate-placeholder');
-          if (translations[lang] && translations[lang][key]) {
-            element.setAttribute('placeholder', translations[lang][key]);
-          }
-        });
-
-        localStorage.setItem('language', lang);
-      }
-
-      // Initialize everything when DOM is loaded
-      document.addEventListener('DOMContentLoaded', function() {
-        // Initialize theme
-        initTheme();
-
-        // Initialize language
-        const savedLanguage = localStorage.getItem('language') || 'en';
-        document.getElementById('languageSelect').value = savedLanguage;
-        applyLanguage(savedLanguage);
-
-        // Language selector functionality
-        const languageSelect = document.getElementById('languageSelect');
-        languageSelect.addEventListener('change', function() {
-          applyLanguage(this.value);
-        });
-
-        // Listen for system theme changes
-        if (window.matchMedia) {
-          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-            applyTheme(e.matches ? 'dark' : 'light');
-          });
-        }
-
         // Tab functionality
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
 
-        tabs.forEach(tab => {
-          tab.addEventListener('click', function() {
-            const targetTab = this.getAttribute('data-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    const targetTab = this.getAttribute('data-tab');
 
-            // Remove active class from all tabs and content
-            tabs.forEach(t => t.classList.remove('active'));
-            tabContents.forEach(content => content.classList.remove('active'));
+                    // Remove active class from all tabs and content
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
 
-            // Add active class to clicked tab and corresponding content
-            this.classList.add('active');
-            document.getElementById(targetTab).classList.add('active');
-          });
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+
+            // Copy functionality for shareable links
+            const copyBtns = document.querySelectorAll('.copy-btn');
+            copyBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const input = this.previousElementSibling;
+                    input.select();
+                    document.execCommand('copy');
+
+                    const originalText = this.textContent;
+                    this.textContent = 'Copied!';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 2000);
+                });
+            });
         });
-
-        // Copy functionality for shareable links
-        const copyBtns = document.querySelectorAll('.copy-btn');
-        copyBtns.forEach(btn => {
-          btn.addEventListener('click', function() {
-            const input = this.previousElementSibling;
-            input.select();
-            document.execCommand('copy');
-            
-            const originalText = this.textContent;
-            const currentLang = localStorage.getItem('language') || 'en';
-            const copiedText = currentLang === 'ar' ? 'تم النسخ!' : 
-                             currentLang === 'id' ? 'Tersalin!' : 'Copied!';
-            
-            this.textContent = copiedText;
-            setTimeout(() => {
-              this.textContent = originalText;
-            }, 2000);
-          });
-        });
-      });
     </script>
-  </body>
+</body>
+
 </html>
